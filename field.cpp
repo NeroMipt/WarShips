@@ -17,6 +17,9 @@ void Field::addShip(int x, int y, Direction dir, Ship sp)
     switch (sp)
     {
     case Ship::battleship :
+    {
+        Warship tbattle(3, sp);
+        army.append(tbattle);
         if(dir == Direction::STRAIGHT)
         {
             if(fd[x][y] + fd[x][y + 1] + fd[x][y + 2] == 0)
@@ -38,14 +41,22 @@ void Field::addShip(int x, int y, Direction dir, Ship sp)
             }
         }
         break;
+    }
     case Ship::boat :
+    {
+        Warship tboat(1, sp);
+        army.append(tboat);
             if(fd[x][y] == 0)
                 fd[x][y] = 1;
             else{
                 //ERROR MESSAGE
             }
             break;
+    }
     case Ship::cruiser :
+    {
+        Warship tcruiser(2, sp);
+        army.append(tcruiser);
         if(dir == Direction::STRAIGHT)
         {
             if(fd[x][y] + fd[x][y + 1] + fd[x][y + 2] + fd[x][y + 3] == 0)
@@ -69,7 +80,11 @@ void Field::addShip(int x, int y, Direction dir, Ship sp)
             }
         }
         break;
+    }
     case Ship::destroyer :
+    {
+        Warship tdestroyer(4, sp);
+        army.append(tdestroyer);
         if(dir == Direction::STRAIGHT)
         {
             if(fd[x][y] + fd[x][y + 1] == 0)
@@ -89,6 +104,7 @@ void Field::addShip(int x, int y, Direction dir, Ship sp)
             }
         }
         break;
+    }
     }
 
 }

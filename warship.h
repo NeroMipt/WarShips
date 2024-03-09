@@ -3,14 +3,17 @@
 
 
 enum class Healthstate {Healthy, Dead, Wounded};
+enum Ship {boat, destroyer, battleship, cruiser};
 
 class Warship
 {
 private:
-    int size;
-    int   hp;
+    int  size;
+    int    hp;
+    Ship type;
+
 public:
-    Warship( const int s);
+    Warship(const int s, const Ship sp);
     Healthstate getState();
     Healthstate attacked();
 };

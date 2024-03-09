@@ -2,15 +2,17 @@
 #define FIELD_H
 
 #include <QFrame>
+#include <warship.h>
 
 enum Direction {STRAIGHT, SIDE};
 
-enum Ship {boat, destroyer, battleship, cruiser};
 
 class Field
 {
 private:
     int fd[10][10];
+    QList<Warship> army;
+
 
 public:
     Field();
