@@ -109,9 +109,27 @@ void Field::addShip(int x, int y, Direction dir, Ship sp)
 
 }
 
+int Field::sumOfField()
+{
+    int sum = 0;
+    for(int i = 0; i < 10; i++)
+    {
+        for(int j = 0; j < 10; j++)
+        {
+           sum += fd[i][j];
+        }
+    }
+    return sum;
+}
+
 void Field::attacked(int x, int y){
+
     if(fd[x][y] == 1)
     {
-
+        if(sumOfField() == 1)
+        {
+            //YOU DIED
+        }
+        totalHp--;
     }
 }

@@ -12,12 +12,15 @@ class Field
 private:
     int fd[10][10];
     QList<Warship> army;
+    int totalHp = 20;
 
 
 public:
     Field();
     void addShip(int x, int y, Direction dir, Ship sp);
     void attacked(int x, int y);
+    void attack(int x, int y);
+    int sumOfField();
 
 };
 
