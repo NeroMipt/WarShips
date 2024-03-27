@@ -10,10 +10,14 @@ enum Direction {STRAIGHT, SIDE};
 class Field
 {
 private:
+<<<<<<< HEAD
     int fd[10][10];
     QList<Warship> army;
     int totalHp = 20;
 
+=======
+    int fd[11][11];
+>>>>>>> 449fcef (start point)
 
 public:
     Field();
