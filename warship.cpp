@@ -1,10 +1,17 @@
 #include "warship.h"
+#include <QPainter>
 
-Warship::Warship( const int s , const Ship sp )
+
+Warship::Warship(const int s , QGraphicsItem *parent)
 {
     size = s;
     hp   = s;
-    type = sp;
+
+    QBrush brush;
+    brush.setStyle(Qt::SolidPattern);
+    brush.setColor(Qt::darkCyan);
+    setBrush(brush);
+
 }
 
 Healthstate Warship::attacked()
@@ -25,3 +32,13 @@ Healthstate Warship::getState()
     if(hp == 0) return Healthstate::Dead;
     else return Healthstate::Wounded;
 }
+/*
+void Warship::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+
+}
+*/
+/*void Warship::rotate()
+{
+    setRotation(90);
+}*/
