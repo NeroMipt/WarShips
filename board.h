@@ -6,7 +6,6 @@
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
 #include <QGraphicsView>
-#include <warship.h>
 
 class board : public QGraphicsView
 {
@@ -14,10 +13,12 @@ class board : public QGraphicsView
 private:
     QList<QGraphicsRectItem*> sqs;
     QGraphicsScene * scene;
-    Boat *b;
+
+    void drawPanel(int x, int y, int width, int height, QColor color, double opcaity);
+
 public:
     board(QGraphicsScene * sc);
-    void setBoard(int x, int y);
+    void setBoard(int x, int y, double scale);
 
 };
 

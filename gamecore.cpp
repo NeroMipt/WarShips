@@ -9,10 +9,10 @@ GameCore::GameCore(QWidget *parent)
     scene->setSceneRect(0, 0, 1024, 768);
     QGraphicsView * view = new QGraphicsView(scene);
     view->show();
+    this->displayMainMenu();
+    //obj = new board(scene);
 
-    obj = new board(scene);
-    obj->setBoard(100, 100);
-    obj->setBoard(500, 500);
+    //this->addShip();
 }
 
 void GameCore::displayMainMenu()
@@ -38,4 +38,34 @@ void GameCore::displayMainMenu()
     quitBtn->setPos(bqxPos, bqyPos);
     connect(quitBtn, SIGNAL(clicked()), this, SLOT(close()));
     scene->addItem(quitBtn);
+}
+
+
+void GameCore::addShip()
+{
+    b1 = new Boat(10, 40);
+    scene->addItem(b1);
+    b2 = new Boat(40, 40);
+    scene->addItem(b2);
+    b3 = new Boat(10, 70);
+    scene->addItem(b3);
+    b4 = new Boat(40, 70);
+    scene->addItem(b4);
+    d1 = new Destroyer(70, 40);
+    scene->addItem(d1);
+    d2 = new Destroyer(100, 40);
+    scene->addItem(d2);
+    d3 = new Destroyer(70, 100);
+    scene->addItem(d3);
+    bs1 = new Battleship(10, 100);
+    scene->addItem(bs1);
+    bs2 = new Battleship(40, 100);
+    scene->addItem(bs2);
+    c = new Cruiser(100, 100);
+    scene->addItem(c);
+}
+
+void GameCore::mouseMoveEvent(QMouseEvent *event)
+{
+
 }

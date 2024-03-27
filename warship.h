@@ -2,6 +2,7 @@
 #define WARSHIP_H
 #include <QGraphicsRectItem>
 #include <QGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
 
 enum class Healthstate {Healthy, Dead, Wounded};
 enum Ship {boat, destroyer, battleship, cruiser};
@@ -11,16 +12,12 @@ class Warship : public QGraphicsRectItem
 private:
     int  size;
     int    hp;
-    Ship type;
 
 public:
-<<<<<<< HEAD
-    Warship(const int s, const Ship sp);
-=======
     Warship( const int s, QGraphicsItem *parent=NULL);
->>>>>>> 449fcef (start point)
     Healthstate getState();
     Healthstate attacked();
+    //void mousePressEvent(QGraphicsSceneMouseEvent* event);
 };
 
 class Boat : public Warship
