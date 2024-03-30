@@ -16,7 +16,6 @@ private:
 
     void drawPanel(int x, int y, int width, int height, QColor color, double opcaity);
 
-
 public:
     board(QGraphicsScene * sc);
     void setBoard(int x, int y, double scale);

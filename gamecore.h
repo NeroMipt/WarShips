@@ -33,6 +33,7 @@ private:
 public:
     GameCore(QWidget* parent=NULL);
     void displayMainMenu();
+    void mouseMoveEvent(QMouseEvent *event);
 };
 
 #endif // GAMECORE_H

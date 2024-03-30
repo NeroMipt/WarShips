@@ -47,4 +47,3 @@ void board::drawPanel(int x, int y, int width, int height, QColor color, double 
     panel->setOpacity(opcaity);
     scene->addItem(panel);
 }
-
