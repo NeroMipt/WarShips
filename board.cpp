@@ -29,7 +29,8 @@ void board::setBoard(int x, int y, double scale)
         {
             QGraphicsRectItem * rect = new QGraphicsRectItem();
 
-            rect->setRect(x + i * 25*scale,y + j * 25*scale, 25*scale, 25*scale);
+            rect->setRect(0, 0, 25*scale, 25*scale);
+            rect->setPos(x + i * 25*scale,y + j * 25*scale);
 
             scene->addItem(rect);
 

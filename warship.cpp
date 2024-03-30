@@ -3,6 +3,7 @@
 #include <QtCore>
 #include <QCursor>
 #include <QList>
+
 Warship::Warship(const int s , QGraphicsItem *parent)
 {
     size = s;
@@ -34,6 +35,7 @@ void Warship::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void Warship::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    setScale(1.25);
     mouseCoord = this->pos() - mapToScene(event->pos());
     this->setCursor(QCursor(Qt::ClosedHandCursor));
 }
@@ -42,11 +44,16 @@ void Warship::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     this->setCursor(QCursor(Qt::ArrowCursor));
     QList<QGraphicsItem *> list = collidingItems() ;
-
-    foreach(QGraphicsItem * i , list)
+    if(isVertical)
     {
-        i->hide();
-    }
+        foreach(QGraphicsItem * i , list)
+        {
+            setPos(i->scenePos());
+            qDebug() << i->pos() << "\n";
+        }
+    }else if(!isVertical && list[1] != NULL)
+        setPos(list[1]->scenePos());
+    setScale(1.5);
     Q_UNUSED(event);
 }
 

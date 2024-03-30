@@ -32,7 +32,9 @@ class Boat : public Warship
 public:
     Boat(const int x, const int y, double scale) : Warship(1)
     {
-        setRect(x * scale, y * scale, 25*scale, 25*scale);
+        setRect(0, 0, 25, 25);
+        setPos(x * scale , y * scale);
+        setScale(scale);
     }
 };
 
@@ -41,7 +43,9 @@ class Destroyer : public Warship
 public:
     Destroyer(const int x, const int y, double scale) : Warship(2)
     {
-        setRect(x * scale, y * scale, 25*scale, 50*scale);
+        setRect(0, 0, 25, 50);
+        setPos(x * scale, y * scale);
+        setScale(scale);
     }
 };
 
@@ -50,7 +54,9 @@ class Battleship : public Warship
 public:
     Battleship(const int x, const int y, double scale) : Warship(3)
     {
-        setRect(x*scale, y * scale, 25*scale, 75*scale);
+        setRect(0, 0, 25, 75);
+        setPos(x * scale, y * scale);
+        setScale(scale);
     }
 };
 
@@ -59,7 +65,9 @@ class Cruiser : public Warship
 public:
     Cruiser(const int x, const int y, double scale) : Warship(4)
     {
-        setRect(x*scale, y*scale, 25*scale, 100*scale);
+        setRect(0, 0, 25, 100);
+        setPos(x * scale, y * scale);
+        setScale(scale);
     }
 };
 
