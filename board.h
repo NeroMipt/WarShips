@@ -4,14 +4,14 @@
 
 #include <QList>
 #include <QGraphicsScene>
-#include <QGraphicsRectItem>
 #include <QGraphicsView>
+#include <cell.h>
 
 class board : public QGraphicsView
 {
     Q_OBJECT
 private:
-    QList<QGraphicsRectItem*> sqs;
+    QList<Cell*> sqs;
     QGraphicsScene * scene;
 
     void drawPanel(int x, int y, int width, int height, QColor color, double opcaity);

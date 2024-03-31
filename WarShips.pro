@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     board.cpp \
     button.cpp \
+    cell.cpp \
     field.cpp \
     gamecore.cpp \
     main.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 HEADERS += \
     board.h \
     button.h \
+    cell.h \
     field.h \
     gamecore.h \
     warship.h

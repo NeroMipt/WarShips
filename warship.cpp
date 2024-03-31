@@ -11,7 +11,7 @@ Warship::Warship(const int s , QGraphicsItem *parent)
 
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);
-    brush.setColor(Qt::darkCyan);
+    brush.setColor(Qt::blue);
     setBrush(brush);
     Q_UNUSED(parent);
 }
@@ -44,16 +44,23 @@ void Warship::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     this->setCursor(QCursor(Qt::ArrowCursor));
     QList<QGraphicsItem *> list = collidingItems() ;
-    if(isVertical)
+
+    foreach(QGraphicsItem * i , list)
     {
-        foreach(QGraphicsItem * i , list)
-        {
-            setPos(i->scenePos());
-            qDebug() << i->pos() << "\n";
-        }
-    }else if(!isVertical && list[1] != NULL)
-        setPos(list[1]->scenePos());
-    setScale(1.5);
+        setPos(i->scenePos());
+        //qDebug() << i->pos() << "\n";
+    }
+    setScale(1.6);
+    QList<QGraphicsItem *> listAfter = collidingItems() ;
+    qDebug() << listAfter.size();
+    if(listAfter.size() > 3 * size + 6)
+    {
+      qDebug() << coords;
+      setScale(originalScale);
+      setPos(coords * originalScale);
+    }else{
+        setScale(1.5);
+    }
     Q_UNUSED(event);
 }
 

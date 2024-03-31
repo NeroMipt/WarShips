@@ -18,6 +18,8 @@ private:
     bool isVertical = true;
     QPointF mouseCoord;
 public:
+    QPointF coords;
+    double originalScale;
     Warship( const int s, QGraphicsItem *parent=NULL);
     Healthstate getState();
     Healthstate attacked();
@@ -35,6 +37,7 @@ public:
         setRect(0, 0, 25, 25);
         setPos(x * scale , y * scale);
         setScale(scale);
+        coords = QPointF(x, y);
     }
 };
 
@@ -46,6 +49,8 @@ public:
         setRect(0, 0, 25, 50);
         setPos(x * scale, y * scale);
         setScale(scale);
+        coords = QPointF(x, y);
+        originalScale = scale;
     }
 };
 
@@ -57,6 +62,8 @@ public:
         setRect(0, 0, 25, 75);
         setPos(x * scale, y * scale);
         setScale(scale);
+        coords = QPointF(x, y);
+        originalScale = scale;
     }
 };
 
@@ -68,6 +75,8 @@ public:
         setRect(0, 0, 25, 100);
         setPos(x * scale, y * scale);
         setScale(scale);
+        coords = QPointF(x, y);
+        originalScale = scale;
     }
 };
 
