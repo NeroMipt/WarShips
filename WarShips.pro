@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     board.cpp \
     button.cpp \
+    client.cpp \
     field.cpp \
     gamecore.cpp \
     main.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 HEADERS += \
     board.h \
     button.h \
+    client.h \
     field.h \
     gamecore.h \
     warship.h
