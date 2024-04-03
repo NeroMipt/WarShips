@@ -3,6 +3,7 @@
 #include <QtCore>
 #include <QCursor>
 #include <QList>
+
 Warship::Warship(const int s , QGraphicsItem *parent)
 {
     size = s;
@@ -10,7 +11,7 @@ Warship::Warship(const int s , QGraphicsItem *parent)
 
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);
-    brush.setColor(Qt::darkCyan);
+    brush.setColor(Qt::blue);
     setBrush(brush);
     Q_UNUSED(parent);
 }
@@ -34,6 +35,7 @@ void Warship::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void Warship::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    setScale(1.25);
     mouseCoord = this->pos() - mapToScene(event->pos());
     this->setCursor(QCursor(Qt::ClosedHandCursor));
 }
@@ -43,10 +45,27 @@ void Warship::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     this->setCursor(QCursor(Qt::ArrowCursor));
     QList<QGraphicsItem *> list = collidingItems() ;
 
-    foreach(QGraphicsItem * i , list)
+    /*foreach(QGraphicsItem * i , list)
     {
-        i->hide();
-    }
+        setPos(i->scenePos());
+        //qDebug() << i->pos() << "\n";
+    }*/
+    if(!list.isEmpty())
+    {
+        setPos(list.back()->scenePos());
+        setScale(1.6);
+        QList<QGraphicsItem *> listAfter = collidingItems() ;
+        qDebug() << listAfter.size();
+        if(listAfter.size() > 3 * size + 6)
+        {
+            qDebug() << coords;
+            setScale(originalScale);
+            setPos(coords * originalScale);
+        }else{
+            setScale(1.5);
+        }
+    }else
+        setPos(coords * originalScale);
     Q_UNUSED(event);
 }
 
@@ -55,7 +74,7 @@ void Warship::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     mouseCoord = this->pos() - mapToScene(event->pos());
     if(isVertical == true)
     {
-        setRotation(90);
+        setRotation(-90);
         this->setPos(mapToScene(event->pos()) + mouseCoord);
         isVertical = false;
     }

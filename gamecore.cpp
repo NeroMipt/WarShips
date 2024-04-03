@@ -9,10 +9,10 @@ GameCore::GameCore(QWidget *parent)
     scene->setSceneRect(0, 0, 1024, 768);
     QGraphicsView * view = new QGraphicsView(scene);
     view->show();
-    //this->displayMainMenu();
-    obj = new board(scene);
+    this->displayMainMenu();
+    /*obj = new board(scene);
 
-    this->addShip();
+    this->addShip();*/
 }
 
 void GameCore::displayMainMenu()
@@ -25,11 +25,11 @@ void GameCore::displayMainMenu()
     titleText->setPos(txPos, tyPos);
     scene->addItem(titleText);
 
-    button * playBtn = new button(QString("Play"));
+    button * playBtn = new button(QString("Connect"));
     int bxPos =this->width()/2 - playBtn->boundingRect().width()/2;
     int byPos = 275;
     playBtn->setPos(bxPos, byPos);
-    //connect(playBtn, SIGNAL(clicked()), this, SLOT(setBoard()));
+    connect(playBtn, SIGNAL(clicked()), this, SLOT(exec()));
     scene->addItem(playBtn);
 
     button * quitBtn = new button(QString("Quit"));
@@ -40,27 +40,35 @@ void GameCore::displayMainMenu()
     scene->addItem(quitBtn);
 }
 
+void GameCore::exec()
+{
+    scene->clear();
+    obj = new board(scene);
+
+    this->addShip();
+}
+
 
 void GameCore::addShip()
 {
-    b1 = new Boat(10, 40, 1.0);
+    b1 = new Boat(10, 40, 1.25);
     scene->addItem(b1);
-    b2 = new Boat(40, 40, 1.0);
+    b2 = new Boat(40, 40, 1.25);
     scene->addItem(b2);
-    b3 = new Boat(10, 70, 1.0);
+    b3 = new Boat(10, 70, 1.25);
     scene->addItem(b3);
-    b4 = new Boat(40, 70, 1.0);
+    b4 = new Boat(40, 70, 1.25);
     scene->addItem(b4);
-    d1 = new Destroyer(70, 40, 1.0);
+    d1 = new Destroyer(70, 40, 1.25);
     scene->addItem(d1);
-    d2 = new Destroyer(100, 40, 1.0);
+    d2 = new Destroyer(100, 40, 1.25);
     scene->addItem(d2);
-    d3 = new Destroyer(70, 100, 1.0);
+    d3 = new Destroyer(70, 100, 1.25);
     scene->addItem(d3);
-    bs1 = new Battleship(10, 100, 1.0);
+    bs1 = new Battleship(10, 100, 1.25);
     scene->addItem(bs1);
-    bs2 = new Battleship(40, 100, 1.0);
+    bs2 = new Battleship(40, 100, 1.25);
     scene->addItem(bs2);
-    c = new Cruiser(100, 100, 1.0);
+    c = new Cruiser(100, 100, 1.25);
     scene->addItem(c);
 }

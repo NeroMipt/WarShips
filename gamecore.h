@@ -33,6 +33,8 @@ private:
 public:
     GameCore(QWidget* parent=NULL);
     void displayMainMenu();
+private slots:
+    void exec();
 };
 
 #endif // GAMECORE_H
