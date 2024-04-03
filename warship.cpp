@@ -45,22 +45,27 @@ void Warship::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     this->setCursor(QCursor(Qt::ArrowCursor));
     QList<QGraphicsItem *> list = collidingItems() ;
 
-    foreach(QGraphicsItem * i , list)
+    /*foreach(QGraphicsItem * i , list)
     {
         setPos(i->scenePos());
         //qDebug() << i->pos() << "\n";
-    }
-    setScale(1.6);
-    QList<QGraphicsItem *> listAfter = collidingItems() ;
-    qDebug() << listAfter.size();
-    if(listAfter.size() > 3 * size + 6)
+    }*/
+    if(!list.isEmpty())
     {
-      qDebug() << coords;
-      setScale(originalScale);
-      setPos(coords * originalScale);
-    }else{
-        setScale(1.5);
-    }
+        setPos(list.back()->scenePos());
+        setScale(1.6);
+        QList<QGraphicsItem *> listAfter = collidingItems() ;
+        qDebug() << listAfter.size();
+        if(listAfter.size() > 3 * size + 6)
+        {
+            qDebug() << coords;
+            setScale(originalScale);
+            setPos(coords * originalScale);
+        }else{
+            setScale(1.5);
+        }
+    }else
+        setPos(coords * originalScale);
     Q_UNUSED(event);
 }
 
@@ -69,7 +74,7 @@ void Warship::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     mouseCoord = this->pos() - mapToScene(event->pos());
     if(isVertical == true)
     {
-        setRotation(90);
+        setRotation(-90);
         this->setPos(mapToScene(event->pos()) + mouseCoord);
         isVertical = false;
     }

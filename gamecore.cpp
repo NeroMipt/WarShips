@@ -9,10 +9,10 @@ GameCore::GameCore(QWidget *parent)
     scene->setSceneRect(0, 0, 1024, 768);
     QGraphicsView * view = new QGraphicsView(scene);
     view->show();
-    //this->displayMainMenu();
-    obj = new board(scene);
+    this->displayMainMenu();
+    /*obj = new board(scene);
 
-    this->addShip();
+    this->addShip();*/
 }
 
 void GameCore::displayMainMenu()
@@ -25,11 +25,11 @@ void GameCore::displayMainMenu()
     titleText->setPos(txPos, tyPos);
     scene->addItem(titleText);
 
-    button * playBtn = new button(QString("Play"));
+    button * playBtn = new button(QString("Connect"));
     int bxPos =this->width()/2 - playBtn->boundingRect().width()/2;
     int byPos = 275;
     playBtn->setPos(bxPos, byPos);
-    //connect(playBtn, SIGNAL(clicked()), this, SLOT(setBoard()));
+    connect(playBtn, SIGNAL(clicked()), this, SLOT(exec()));
     scene->addItem(playBtn);
 
     button * quitBtn = new button(QString("Quit"));
@@ -38,6 +38,14 @@ void GameCore::displayMainMenu()
     quitBtn->setPos(bqxPos, bqyPos);
     connect(quitBtn, SIGNAL(clicked()), this, SLOT(close()));
     scene->addItem(quitBtn);
+}
+
+void GameCore::exec()
+{
+    scene->clear();
+    obj = new board(scene);
+
+    this->addShip();
 }
 
 
