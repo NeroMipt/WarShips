@@ -1,7 +1,9 @@
 #include "client.h"
 
-void Client::SendToServer(QString str)
+void Client::SendToServer(int num, int nc)
 {
+    qDebug() << "here";
+    QString str = QString::number(num) + " " + QString::number(nc);
     Data.clear();
     QDataStream out(&Data, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_5_9);
@@ -25,10 +27,25 @@ void Client::slotReadyRead()
 {
     QDataStream in(socket);
     in.setVersion(QDataStream::Qt_5_9);
+    QString str;
     if(in.status() == QDataStream::Ok)
     {
-        QString str;
         in >> str;
     }
-
+    QStringList list = str.split(' ');
+    int command = list[0].toInt();
+    int nc      = list[1].toInt();
+    switch(command){
+    case 1:{
+        emit attacked(nc);
+    }
+    case -3:{
+        emit responseDamage(nc);
+    }
+    case -4:{
+        emit responseNonDamage(nc);
+    }
+    case -5:
+        emit responseWin();
+    }
 }

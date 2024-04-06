@@ -13,3 +13,9 @@ Cell::Cell(const int x, const int y, const double scale, int n, QColor color, QG
     setBrush(brush);
     Q_UNUSED(parent);
 }
+
+void Cell::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    emit choosedCell(number);
+    Q_UNUSED(event);
+}

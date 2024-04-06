@@ -13,7 +13,6 @@ SOURCES += \
     button.cpp \
     cell.cpp \
     client.cpp \
-    field.cpp \
     gamecore.cpp \
     main.cpp \
     warship.cpp
@@ -23,7 +22,6 @@ HEADERS += \
     button.h \
     cell.h \
     client.h \
-    field.h \
     gamecore.h \
     warship.h
 

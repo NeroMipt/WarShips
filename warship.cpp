@@ -3,6 +3,7 @@
 #include <QtCore>
 #include <QCursor>
 #include <QList>
+#include <cell.h>
 
 Warship::Warship(const int s , QGraphicsItem *parent)
 {
@@ -35,7 +36,7 @@ void Warship::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void Warship::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    setScale(1.25);
+    setScale(1.1);
     mouseCoord = this->pos() - mapToScene(event->pos());
     this->setCursor(QCursor(Qt::ClosedHandCursor));
 }
@@ -45,23 +46,38 @@ void Warship::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     this->setCursor(QCursor(Qt::ArrowCursor));
     QList<QGraphicsItem *> list = collidingItems() ;
 
-    /*foreach(QGraphicsItem * i , list)
-    {
-        setPos(i->scenePos());
-        //qDebug() << i->pos() << "\n";
-    }*/
+
     if(!list.isEmpty())
     {
-        setPos(list.back()->scenePos());
-        setScale(1.6);
+        setScale(1.7);
+        setPos(list.back()->scenePos() - QPointF(5, 5));
+        isCollided = false;
         QList<QGraphicsItem *> listAfter = collidingItems() ;
-        qDebug() << listAfter.size();
-        if(listAfter.size() > 3 * size + 6)
+
+        foreach(QGraphicsItem * i , listAfter)
         {
-            qDebug() << coords;
-            setScale(originalScale);
-            setPos(coords * originalScale);
-        }else{
+            Warship * item= dynamic_cast<Warship *>(i);
+            //Cell * itemCell = dynamic_cast<Cell *>(i);
+            if (item)
+            {
+                setScale(originalScale);
+                setPos(coords * originalScale);
+                isCollided = true;
+            }
+            /*if(!(itemCell->number >= 0))
+            {
+                setScale(originalScale);
+                setPos(coords * originalScale);
+                isCollided = true;
+            }*/
+
+        }
+        if(isCollided == false)
+        {
+            if(isVertical == false)
+                setPos(list.back()->scenePos() + QPointF(0, 29.6 * originalScale));
+            else
+                setPos(list.back()->scenePos());
             setScale(1.5);
         }
     }else
@@ -74,7 +90,9 @@ void Warship::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     mouseCoord = this->pos() - mapToScene(event->pos());
     if(isVertical == true)
     {
+        setTransformOriginPoint(this->scenePos());
         setRotation(-90);
+        setTransformOriginPoint(0, 0);
         this->setPos(mapToScene(event->pos()) + mouseCoord);
         isVertical = false;
     }

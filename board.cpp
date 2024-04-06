@@ -1,5 +1,7 @@
 #include "board.h"
 #include <QtCore>
+#include <warship.h>
+
 board::board(QGraphicsScene *sc)
 {
     scene = sc;
@@ -8,18 +10,17 @@ board::board(QGraphicsScene *sc)
     this->drawPanel(0, 0, 150, 768, Qt::white, 1);
 
 
-
     QGraphicsTextItem* p1 = new QGraphicsTextItem("Player 1");
     p1->setPos(25, 0);
     scene->addItem(p1);
 
-    this->setBoard(200, 250, 1.5);
-    this->setBoard(700, 250, 1.5);
+    playerCells = this->setBoard(200, 250, 1.5);
+    enemyCells = this->setBoard(700, 250, 1.5);
 }
 
 
 
-void board::setBoard(int x, int y, double scale)
+QList<Cell *> board::setBoard(int x, int y, double scale)
 {
     int counter = 0;
     Cell *tl = new Cell(x, y, 1.5, -1, Qt::gray);
@@ -58,17 +59,101 @@ void board::setBoard(int x, int y, double scale)
         scene->addItem(bdb);
     }
     y += 25 * scale;
+    QList<Cell*> sqs;
     for(int i = 0; i < 10; i++)
     {
         for(int j = 0; j < 10; j++)
         {
-            counter++;
             Cell * rect = new Cell(x + i * 25 * scale, y + j * 25 *scale, scale, counter, Qt::white);
+            counter++;
             sqs.append(rect);
-
             scene->addItem(rect);
 
         }
+    }
+    return sqs;
+}
+
+void board::rdyBtn_clicked()
+{
+    foreach(Cell * i , this->playerCells)
+    {
+        QList<QGraphicsItem *> list = i->collidingItems() ;
+        foreach(QGraphicsItem * t , list)
+        {
+            Warship * item= dynamic_cast<Warship *>(t);
+            if (item)
+            {
+                item->setPos(item->scenePos() + QPointF(1, 1));
+                item->setScale(1.1);
+            }
+        }
+    }
+    foreach(Cell * i , this->playerCells)
+    {
+        QList<QGraphicsItem *> list = i->collidingItems() ;
+        foreach(QGraphicsItem * t , list)
+        {
+            Warship * item= dynamic_cast<Warship *>(t);
+            if (item)
+            {
+                QBrush brush;
+                brush.setStyle(Qt::SolidPattern);
+                brush.setColor(Qt::blue);
+                i->setBrush(brush);
+                i->isShip = true;
+            }
+        }
+    }
+    foreach(Cell * i , this->playerCells)
+    {
+        QList<QGraphicsItem *> list = i->collidingItems() ;
+        foreach(QGraphicsItem * t , list)
+        {
+            Warship * item= dynamic_cast<Warship *>(t);
+            if (item)
+            {
+                item->hide();
+            }
+        }
+    }
+}
+
+void board::get_Damage(int nc)
+{
+    bool wounded = false;
+    QList<QGraphicsItem *> list = playerCells[nc]->collidingItems() ;
+    foreach(QGraphicsItem * i , list)
+    {
+        Warship * item= dynamic_cast<Warship *>(i);
+        if (item)
+        {
+            Healthstate st = item->attacked();
+            if(st == Healthstate::Wounded)
+            {
+                wounded = true;
+                QBrush brush;
+                brush.setStyle(Qt::SolidPattern);
+                brush.setColor(Qt::yellow);
+                playerCells[nc]->setBrush(brush);
+                emit is_Damaged(true, nc);
+            }else{
+                item->show();
+                QBrush brush;
+                brush.setStyle(Qt::SolidPattern);
+                brush.setColor(Qt::red);
+                item->setBrush(brush);
+                emit is_Damaged(true, nc);
+            }
+        }
+    }
+    if(!wounded)
+    {
+        QBrush brush;
+        brush.setStyle(Qt::SolidPattern);
+        brush.setColor(Qt::cyan);
+        playerCells[nc]->setBrush(brush);
+        emit is_Damaged(false, nc);
     }
 }
 
