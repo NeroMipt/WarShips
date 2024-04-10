@@ -1,80 +1,89 @@
-#include "server.hpp"
-#include <iostream>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <netinet/in.h>
+#include "server.h"
 
-#define BUFF_SIZE 1024
-#define DEFAULT_PORT 1601
-
-
-
-class Socket
+Server::Server()
 {
-private:
-    struct sockaddr_in server_adress;
-    int client, server;
-    socklen_t size;
-
-public:
-    Socket(int port)
+    if (this->listen(QHostAddress::Any, PORT))
     {
-        //initializing socket
-        client = socket(AF_INET, SOCK_STREAM, 0);
-        if (client < 0)
-        {
-            std::cout << "SERVER_ERROR: establishing socket error.\n";
-            exit(0);
-        }
-        std::cout << "SERVER: Socket for server was successfully created\n";
-
-        server_adress.sin_port = htons(port); // identifying port with macros
-        server_adress.sin_family = AF_INET;
-        server_adress.sin_addr.s_addr = htons(INADDR_ANY);
-        size = sizeof(server_adress);
-
-        int ret = bind(client, reinterpret_cast<struct sockaddr*>(&server_adress), size);
-
-        if (ret < 0) {
-            std::cout << EROFS << "binding connection. Socket has already been established. \n";
-            exit(0);
-        }
-
+        qDebug() << "start";
     }
-    void start_listening()
+    else
     {
-        std::cout << "SERVER: " << "Listening clients...";
-        listen(client, 1);
-
-        server = accept(client, reinterpret_cast<struct sockaddr*>(&server_adress), &size);
-        if (server < 0)
-        {
-            std::cout << EROFS << "Can't accept clients.\n";
-            exit(0);
-        }
-
-        char buffer[BUFF_SIZE];
-        while(server > 0)
-        {
-            strcpy(buffer, "=> Server connected!\n");
-            send(server, buffer, BUFF_SIZE, 0);
-            std::cout << "=> Connected to client #1\n" << "Enter";
-        }
+        qDebug() << "error";
     }
-};
-
-
-int main()
-{
-    Socket soc1(DEFAULT_PORT);
-
+    Sockets.first = nullptr;
+    Sockets.second = nullptr;
 }
-// int main(int argc, char const* argv[])
-// {
-//     int a = 1;
-//     std::cout << a << "\n";
-// }
+
+// этот метод - переписанный метод виртуального класса QTcpServer
+void Server::incomingConnection(qintptr socketDescriptor)
+{
+    socket = new QTcpSocket;
+    socket->setSocketDescriptor(socketDescriptor);
+
+    connect(socket, &QTcpSocket::readyRead, this, &Server::slotReadyRead);
+    connect(socket, &QTcpSocket::disconnected, socket, &QTcpSocket::deleteLater);
+
+    if (Sockets.first == nullptr)
+    {
+        Sockets.first = socket;
+        qDebug() << "First client connected";
+        SendToClient1("CLIENT_1");
+    } else if (Sockets.second == nullptr)
+    {
+        Sockets.second = socket;
+        qDebug() << "Second client connected";
+        SendToClient2("CLIENT_2");
+    } else
+    {
+        qDebug() << "Two clients already connected";
+        socket->disconnectFromHost();
+        socket->deleteLater();
+    }
+}
+
+//этот метод вычитывает строку из сокета и вызывет метод SendToClient(QString)
+void Server::slotReadyRead()
+{
+    socket = (QTcpSocket*)sender();
+    QDataStream in(socket);
+    in.setVersion(QDataStream::Qt_5_9);
+    if (in.status() == QDataStream::Ok)
+    {
+        qDebug() << "read...";
+        QString str;
+        in >> str;
+        qDebug() << str;
+        if (Sockets.first == socket)
+        {
+            SendToClient2(str);
+        }
+        else if (Sockets.second == socket)
+        {
+            SendToClient1(str);
+        }
+    }
+    else
+    {
+        qDebug() << "DataStream error";
+    }
+}
+
+// эти методы отправляют данные клиентам
+void Server::SendToClient1(QString str)
+{
+    Data.clear();
+    QDataStream out(&Data, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+    out << str;
+    Sockets.first->write(Data);
+}
+
+void Server::SendToClient2(QString str)
+{
+    Data.clear();
+    QDataStream out(&Data, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+    out << str;
+    Sockets.second->write(Data);
+}
+
