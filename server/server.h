@@ -17,10 +17,10 @@ public:
     QTcpSocket *socket;
 
 private:
-    QVector <QTcpSocket*> Sockets;
+    QPair <QTcpSocket*, QTcpSocket*> Sockets;
     QByteArray Data;
-    void SendToClient(QString str);
-    int turn = 0;
+    void SendToClient1(QString str);
+    void SendToClient2(QString str);
 
 public slots:
     void incomingConnection(qintptr socketDescriptor);

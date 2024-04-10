@@ -10,19 +10,38 @@ Server::Server()
     {
         qDebug() << "error";
     }
+    Sockets.first = nullptr;
+    Sockets.second = nullptr;
 }
 
+// этот метод - переписанный метод виртуального класса QTcpServer
 void Server::incomingConnection(qintptr socketDescriptor)
 {
     socket = new QTcpSocket;
     socket->setSocketDescriptor(socketDescriptor);
+
     connect(socket, &QTcpSocket::readyRead, this, &Server::slotReadyRead);
     connect(socket, &QTcpSocket::disconnected, socket, &QTcpSocket::deleteLater);
 
-    Sockets.push_back(socket);
-    qDebug() << "client connected" << socketDescriptor;
+    if (Sockets.first == nullptr)
+    {
+        Sockets.first = socket;
+        qDebug() << "First client connected";
+        SendToClient1("CLIENT_1");
+    } else if (Sockets.second == nullptr)
+    {
+        Sockets.second = socket;
+        qDebug() << "Second client connected";
+        SendToClient2("CLIENT_2");
+    } else
+    {
+        qDebug() << "Two clients already connected";
+        socket->disconnectFromHost();
+        socket->deleteLater();
+    }
 }
 
+//этот метод вычитывает строку из сокета и вызывет метод SendToClient(QString)
 void Server::slotReadyRead()
 {
     socket = (QTcpSocket*)sender();
@@ -34,14 +53,14 @@ void Server::slotReadyRead()
         QString str;
         in >> str;
         qDebug() << str;
-        for(int i = 0; i < Sockets.size(); i++)
+        if (Sockets.first == socket)
         {
-            if(Sockets[i] == socket)
-            {
-                turn = i;
-            }
+            SendToClient2(str);
         }
-        SendToClient(str);
+        else if (Sockets.second == socket)
+        {
+            SendToClient1(str);
+        }
     }
     else
     {
@@ -49,16 +68,22 @@ void Server::slotReadyRead()
     }
 }
 
-void Server::SendToClient(QString str)
+// эти методы отправляют данные клиентам
+void Server::SendToClient1(QString str)
 {
     Data.clear();
     QDataStream out(&Data, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_5_9);
     out << str;
-    Sockets[1 - turn]->write(Data);
-
+    Sockets.first->write(Data);
 }
 
-
-
+void Server::SendToClient2(QString str)
+{
+    Data.clear();
+    QDataStream out(&Data, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_5_9);
+    out << str;
+    Sockets.second->write(Data);
+}
 
