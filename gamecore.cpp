@@ -105,24 +105,25 @@ void GameCore::nonDamaged(int nc)
 
 void GameCore::addShip()
 {
-    b1 = new Boat(10, 40, 1.25);
+    Boat *b1 = new Boat(10, 40, 1.25);
     scene->addItem(b1);
-    b2 = new Boat(40, 40, 1.25);
+    Boat *b2 = new Boat(40, 40, 1.25);
     scene->addItem(b2);
-    b3 = new Boat(10, 70, 1.25);
+    Boat *b3 = new Boat(10, 70, 1.25);
     scene->addItem(b3);
-    b4 = new Boat(40, 70, 1.25);
+    Boat *b4 = new Boat(40, 70, 1.25);
     scene->addItem(b4);
-    d1 = new Destroyer(70, 40, 1.25);
+    Destroyer *d1 = new Destroyer(70, 40, 1.25);
     scene->addItem(d1);
-    d2 = new Destroyer(100, 40, 1.25);
+    Destroyer *d2 = new Destroyer(100, 40, 1.25);
     scene->addItem(d2);
-    d3 = new Destroyer(70, 100, 1.25);
+    Destroyer *d3 = new Destroyer(70, 100, 1.25);
     scene->addItem(d3);
-    bs1 = new Battleship(10, 100, 1.25);
+    Battleship *bs1 = new Battleship(10, 100, 1.25);
     scene->addItem(bs1);
-    bs2 = new Battleship(40, 100, 1.25);
+    Battleship *bs2 = new Battleship(40, 100, 1.25);
     scene->addItem(bs2);
-    c = new Cruiser(100, 100, 1.25);
+    Cruiser *c = new Cruiser(100, 100, 1.25);
     scene->addItem(c);
+
 }

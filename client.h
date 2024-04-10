@@ -11,7 +11,6 @@ class Client : public QObject
 private:
     QTcpSocket *socket;
     QByteArray Data;
-    void connection(QString address);
 public:
     Client();
     void SendToServer(int num, int nc);

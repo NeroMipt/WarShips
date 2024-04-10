@@ -6,6 +6,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <cell.h>
+#include <warship.h>
 
 class board : public QGraphicsView
 {
@@ -19,6 +20,7 @@ private:
 public:
     QList<Cell*> enemyCells;
     QList<Cell*> playerCells;
+    QList<QGraphicsItem*> ship;
     board(QGraphicsScene * sc);
     QList<Cell*> setBoard(int x, int y, double scale);
 signals:

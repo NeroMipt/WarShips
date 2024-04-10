@@ -1,6 +1,5 @@
 #include "board.h"
 #include <QtCore>
-#include <warship.h>
 
 board::board(QGraphicsScene *sc)
 {
@@ -113,7 +112,8 @@ void board::rdyBtn_clicked()
             Warship * item= dynamic_cast<Warship *>(t);
             if (item)
             {
-                item->hide();
+                item->setVisible(false);
+                this->ship.append(item);
             }
         }
     }
@@ -121,6 +121,10 @@ void board::rdyBtn_clicked()
 
 void board::get_Damage(int nc)
 {
+    foreach(QGraphicsItem * i, this->ship)
+    {
+        i->setVisible(true);
+    }
     bool wounded = false;
     QList<QGraphicsItem *> list = playerCells[nc]->collidingItems() ;
     foreach(QGraphicsItem * i , list)
@@ -138,6 +142,7 @@ void board::get_Damage(int nc)
                 playerCells[nc]->setBrush(brush);
                 emit is_Damaged(true, nc);
             }else{
+                wounded = true;
                 item->show();
                 QBrush brush;
                 brush.setStyle(Qt::SolidPattern);
@@ -154,6 +159,10 @@ void board::get_Damage(int nc)
         brush.setColor(Qt::cyan);
         playerCells[nc]->setBrush(brush);
         emit is_Damaged(false, nc);
+    }
+    foreach(QGraphicsItem * i, this->ship)
+    {
+        i->setVisible(false);
     }
 }
 

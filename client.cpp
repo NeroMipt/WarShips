@@ -2,7 +2,6 @@
 
 void Client::SendToServer(int num, int nc)
 {
-    qDebug() << "here";
     QString str = QString::number(num) + " " + QString::number(nc);
     Data.clear();
     QDataStream out(&Data, QIODevice::WriteOnly);
@@ -11,16 +10,14 @@ void Client::SendToServer(int num, int nc)
     socket->write(Data);
 }
 
-void Client::connection(QString address)
-{
-    socket->connectToHost(address, 2323);
-}
+
 
 Client::Client()
 {
     socket = new QTcpSocket();
     connect(socket, &QTcpSocket::readyRead, this, &Client::slotReadyRead);
     connect(socket, &QTcpSocket::disconnected, socket, &QTcpSocket::deleteLater);
+    socket->connectToHost("127.0.0.1", 2323);
 }
 
 void Client::slotReadyRead()
@@ -41,6 +38,7 @@ void Client::slotReadyRead()
     }
     case -3:{
         emit responseDamage(nc);
+        qDebug() << "rd";
     }
     case -4:{
         emit responseNonDamage(nc);
