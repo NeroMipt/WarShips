@@ -16,6 +16,7 @@ private:
     int  size;
     int    hp;
     bool isVertical = true;
+    bool isCollided = false;
     QPointF mouseCoord;
 public:
     QPointF coords;

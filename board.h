@@ -6,20 +6,28 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <cell.h>
+#include <warship.h>
 
 class board : public QGraphicsView
 {
     Q_OBJECT
 private:
-    QList<Cell*> sqs;
     QGraphicsScene * scene;
 
     void drawPanel(int x, int y, int width, int height, QColor color, double opcaity);
 
 
 public:
+    QList<Cell*> enemyCells;
+    QList<Cell*> playerCells;
+    QList<QGraphicsItem*> ship;
     board(QGraphicsScene * sc);
-    void setBoard(int x, int y, double scale);
+    QList<Cell*> setBoard(int x, int y, double scale);
+signals:
+    void is_Damaged(bool st, int nc);
+public slots:
+    void rdyBtn_clicked();
+    void get_Damage(int nc);
 
 };
 
