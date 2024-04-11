@@ -27,12 +27,12 @@ void Server::incomingConnection(qintptr socketDescriptor)
     {
         Sockets.first = socket;
         qDebug() << "First client connected";
-        SendToClient1("CLIENT_1");
+        //SendToClient1("CLIENT_1");
     } else if (Sockets.second == nullptr)
     {
         Sockets.second = socket;
         qDebug() << "Second client connected";
-        SendToClient2("CLIENT_2");
+        //SendToClient2("CLIENT_2");
     } else
     {
         qDebug() << "Two clients already connected";
@@ -49,17 +49,18 @@ void Server::slotReadyRead()
     in.setVersion(QDataStream::Qt_5_9);
     if (in.status() == QDataStream::Ok)
     {
-        qDebug() << "read...";
         QString str;
         in >> str;
         qDebug() << str;
         if (Sockets.first == socket)
         {
             SendToClient2(str);
+            qDebug() << "Got " << str <<" from second to first client";
         }
         else if (Sockets.second == socket)
         {
             SendToClient1(str);
+            qDebug() << "Got " << str <<" from first to second client";
         }
     }
     else

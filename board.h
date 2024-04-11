@@ -24,7 +24,7 @@ public:
     board(QGraphicsScene * sc);
     QList<Cell*> setBoard(int x, int y, double scale);
 signals:
-    void is_Damaged(bool st, int nc);
+    void is_Damaged(bool isKilled, bool st, int nc);
 public slots:
     void rdyBtn_clicked();
     void get_Damage(int nc);

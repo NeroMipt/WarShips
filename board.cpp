@@ -126,6 +126,7 @@ void board::get_Damage(int nc)
         i->setVisible(true);
     }
     bool wounded = false;
+    bool isAlive = true;
     QList<QGraphicsItem *> list = playerCells[nc]->collidingItems() ;
     foreach(QGraphicsItem * i , list)
     {
@@ -140,15 +141,18 @@ void board::get_Damage(int nc)
                 brush.setStyle(Qt::SolidPattern);
                 brush.setColor(Qt::yellow);
                 playerCells[nc]->setBrush(brush);
-                emit is_Damaged(true, nc);
+                emit is_Damaged(false, true, nc);
             }else{
                 wounded = true;
-                item->show();
+                isAlive = false;
+                item->setVisible(true);
+                item->setScale(1.5);
+                item->setPos(item->scenePos() - QPointF(6, 6));
                 QBrush brush;
                 brush.setStyle(Qt::SolidPattern);
                 brush.setColor(Qt::red);
                 item->setBrush(brush);
-                emit is_Damaged(true, nc);
+                emit is_Damaged(true, true, nc);
             }
         }
     }
@@ -158,11 +162,14 @@ void board::get_Damage(int nc)
         brush.setStyle(Qt::SolidPattern);
         brush.setColor(Qt::cyan);
         playerCells[nc]->setBrush(brush);
-        emit is_Damaged(false, nc);
+        emit is_Damaged(false, false, nc);
     }
-    foreach(QGraphicsItem * i, this->ship)
+    if(isAlive)
     {
-        i->setVisible(false);
+        foreach(QGraphicsItem * i, this->ship)
+        {
+            i->setVisible(false);
+        }
     }
 }
 

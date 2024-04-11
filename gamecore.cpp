@@ -44,7 +44,7 @@ void GameCore::exec()
     cl = new Client();
     scene->clear();
     obj = new board(scene);
-    button * rdyBtn = new  button(QString("Ready"));
+    rdyBtn = new  button(QString("Ready"));
     rdyBtn->setPos(500, 100);
     rdyBtn->setScale(1);
     connect(rdyBtn, SIGNAL(clicked()), this, SLOT(isReady()));
@@ -52,7 +52,8 @@ void GameCore::exec()
     connect(cl, SIGNAL(attacked(int)), obj, SLOT(get_Damage(int)));
     connect(cl, SIGNAL(responseDamage(int)), this, SLOT(damaged(int)));
     connect(cl, SIGNAL(responseNonDamage(int)), this, SLOT(nonDamaged(int)));
-    connect(obj, SIGNAL(is_Damaged(bool,int)), this, SLOT(isDamaged(bool,int)));
+    connect(cl, SIGNAL(responseKilledObj(int)), this, SLOT(killedSh(int)));
+    connect(obj, SIGNAL(is_Damaged(bool,bool,int)), this, SLOT(isDamaged(bool,bool,int)));
     scene->addItem(rdyBtn);
     foreach(Cell * i , obj->enemyCells)
     {
@@ -64,16 +65,20 @@ void GameCore::exec()
 void GameCore::isReady()
 {
     cl->SendToServer(-2, -1);
+    scene->removeItem(rdyBtn);
 }
 
-void GameCore::isDamaged(bool tof, int nc)
+void GameCore::isDamaged(bool isKilled, bool tof, int nc)
 {
     if(tof)
     {
         totalHP--;
         if(totalHP == 0)
             cl->SendToServer(-5, nc);
-        cl->SendToServer(-3, nc);
+        if(isKilled)
+            cl->SendToServer(-6, nc);
+        else
+            cl->SendToServer(-3, nc);
     }else cl->SendToServer(-4, nc);
 }
 
@@ -88,10 +93,8 @@ void GameCore::attacking(int nc)
 
 void GameCore::damaged(int nc)
 {
-    QBrush brush;
-    brush.setStyle(Qt::SolidPattern);
-    brush.setColor(Qt::red);
-    obj->enemyCells[nc]->setBrush(brush);
+    obj->enemyCells[nc]->setColor(Qt::yellow);
+    obj->enemyCells[nc]->isShip = true;
 }
 
 void GameCore::nonDamaged(int nc)
@@ -100,6 +103,48 @@ void GameCore::nonDamaged(int nc)
     brush.setStyle(Qt::SolidPattern);
     brush.setColor(Qt::cyan);
     obj->enemyCells[nc]->setBrush(brush);
+}
+
+void GameCore::killedSh(int nc)
+{
+    qDebug() << nc;
+    obj->enemyCells[nc]->setColor(Qt::red);
+    if(nc >= 1 && obj->enemyCells[nc-1]->isShip)
+    {
+        int i = nc - 1;
+        while(obj->enemyCells[i]->isShip)
+        {
+            obj->enemyCells[i]->setColor(Qt::red);
+            i--;
+        }
+    }
+    if(nc <= 99 && obj->enemyCells[nc+1]->isShip)
+    {
+        int i = nc + 1;
+        while(obj->enemyCells[i]->isShip)
+        {
+            obj->enemyCells[i]->setColor(Qt::red);
+            i++;
+        }
+    }
+    if(nc <= 89 && obj->enemyCells[nc+10]->isShip)
+    {
+        int i = nc + 10;
+        while(obj->enemyCells[i]->isShip)
+        {
+            obj->enemyCells[i]->setColor(Qt::red);
+            i+=10;
+        }
+    }
+    if(nc >= 10 && obj->enemyCells[nc-10]->isShip)
+    {
+        int i = nc - 10;
+        while(obj->enemyCells[i]->isShip)
+        {
+            obj->enemyCells[i]->setColor(Qt::red);
+            i-=10;
+        }
+    }
 }
 
 

@@ -35,15 +35,24 @@ void Client::slotReadyRead()
     switch(command){
     case 1:{
         emit attacked(nc);
+        break;
     }
     case -3:{
         emit responseDamage(nc);
-        qDebug() << "rd";
+        break;
     }
     case -4:{
         emit responseNonDamage(nc);
+        break;
     }
-    case -5:
+    case -5:{
         emit responseWin();
+        break;
     }
+    case -6:{
+        emit responseKilledObj(nc);
+        break;
+    }
+    }
+
 }

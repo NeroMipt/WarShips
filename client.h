@@ -20,6 +20,7 @@ signals:
     void attacked(int nc);
     void responseDamage(int nc);
     void responseNonDamage(int nc);
+    void responseKilledObj(int nc);
     void responseWin();
 };
 

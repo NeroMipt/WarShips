@@ -21,7 +21,7 @@ private:
     Client *cl;
     QGraphicsScene * scene;
     board * obj;
-    Cruiser *c;
+    button * rdyBtn;
 
     void addShip();
 public:
@@ -30,10 +30,11 @@ public:
 private slots:
     void exec();
     void isReady();
-    void isDamaged(bool tof, int nc);
+    void isDamaged(bool isKilled, bool tof, int nc);
     void attacking(int nc);
     void damaged(int nc);
     void nonDamaged(int nc);
+    void killedSh(int nc);
 };
 
 #endif // GAMECORE_H
