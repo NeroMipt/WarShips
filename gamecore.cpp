@@ -84,65 +84,70 @@ void GameCore::isDamaged(bool isKilled, bool tof, int nc)
 
 void GameCore::attacking(int nc)
 {
-    QBrush brush;
-    brush.setStyle(Qt::SolidPattern);
-    brush.setColor(Qt::yellow);
-    obj->enemyCells[nc]->setBrush(brush);
+    obj->enemyCells[nc]->setColor(Qt::yellow);
     cl->SendToServer(1, nc);
 }
 
 void GameCore::damaged(int nc)
 {
     obj->enemyCells[nc]->setColor(Qt::yellow);
-    obj->enemyCells[nc]->isShip = true;
+    obj->enemyCells[nc]->set_isShip(true);
 }
 
 void GameCore::nonDamaged(int nc)
 {
-    QBrush brush;
-    brush.setStyle(Qt::SolidPattern);
-    brush.setColor(Qt::cyan);
-    obj->enemyCells[nc]->setBrush(brush);
+    obj->enemyCells[nc]->setColor(Qt::cyan);
 }
 
 void GameCore::killedSh(int nc)
 {
     qDebug() << nc;
     obj->enemyCells[nc]->setColor(Qt::red);
-    if(nc >= 1 && obj->enemyCells[nc-1]->isShip)
+    if(nc >= 1)
     {
-        int i = nc - 1;
-        while(obj->enemyCells[i]->isShip)
-        {
-            obj->enemyCells[i]->setColor(Qt::red);
-            i--;
+        if(obj->enemyCells[nc-1]->is_Ship()){
+            int i = nc - 1;
+            while(obj->enemyCells[i]->is_Ship())
+            {
+                obj->enemyCells[i]->setColor(Qt::red);
+                i--;
+            }
         }
     }
-    if(nc <= 99 && obj->enemyCells[nc+1]->isShip)
+    if(nc < 99)
     {
-        int i = nc + 1;
-        while(obj->enemyCells[i]->isShip)
+        if(obj->enemyCells[nc+1]->is_Ship())
         {
-            obj->enemyCells[i]->setColor(Qt::red);
-            i++;
+            int i = nc + 1;
+            while(obj->enemyCells[i]->is_Ship())
+            {
+                obj->enemyCells[i]->setColor(Qt::red);
+                i++;
+            }
         }
     }
-    if(nc <= 89 && obj->enemyCells[nc+10]->isShip)
+    if(nc <= 89)
     {
-        int i = nc + 10;
-        while(obj->enemyCells[i]->isShip)
+        if(obj->enemyCells[nc+10]->is_Ship())
         {
-            obj->enemyCells[i]->setColor(Qt::red);
-            i+=10;
+            int i = nc + 10;
+            while(obj->enemyCells[i]->is_Ship())
+            {
+                obj->enemyCells[i]->setColor(Qt::red);
+                i+=10;
+            }
         }
     }
-    if(nc >= 10 && obj->enemyCells[nc-10]->isShip)
+    if(nc >= 10)
     {
-        int i = nc - 10;
-        while(obj->enemyCells[i]->isShip)
+        if(obj->enemyCells[nc-10]->is_Ship())
         {
-            obj->enemyCells[i]->setColor(Qt::red);
-            i-=10;
+            int i = nc - 10;
+            while(obj->enemyCells[i]->is_Ship())
+            {
+                obj->enemyCells[i]->setColor(Qt::red);
+                i-=10;
+            }
         }
     }
 }

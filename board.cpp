@@ -13,17 +13,17 @@ board::board(QGraphicsScene *sc)
     p1->setPos(25, 0);
     scene->addItem(p1);
 
-    playerCells = this->setBoard(200, 250, 1.5);
-    enemyCells = this->setBoard(700, 250, 1.5);
+    playerCells = this->setBoard(200, 250, 1.5, false);
+    enemyCells = this->setBoard(700, 250, 1.5, true);
 }
 
 
 
-QList<Cell *> board::setBoard(int x, int y, double scale)
+QList<Cell *> board::setBoard(int x, int y, double scale, bool isEn)
 {
     int counter = 0;
-    Cell *tl = new Cell(x, y, 1.5, -1, Qt::gray);
-    Cell *tr = new Cell(x + 275*scale, y, 1.5, -1, Qt::gray);
+    Cell *tl = new Cell(x, y, 1.5, -1, Qt::gray, true);
+    Cell *tr = new Cell(x + 275*scale, y, 1.5, -1, Qt::gray, true);
     scene->addItem(tl);
     scene->addItem(tr);
     int num = 49;
@@ -36,13 +36,13 @@ QList<Cell *> board::setBoard(int x, int y, double scale)
         num++;
         p1->setPos(x, y + i * 25 * scale);
         p1->setScale(scale);
-        Cell *bdr = new Cell(x + 275 * scale, y + i * 25 * scale - 1, 1.5, -1, Qt::gray);
+        Cell *bdr = new Cell(x + 275 * scale, y + i * 25 * scale - 1, 1.5, -1, Qt::gray, true);
         scene->addItem(p1);
         scene->addItem(bdr);
     }
     num = 65;
     y-= 25 * scale;
-    Cell *bl = new Cell(x, y + 275 * scale, 1.5, -1, Qt::gray);
+    Cell *bl = new Cell(x, y + 275 * scale, 1.5, -1, Qt::gray, true);
     scene->addItem(bl);
     x+=25 * scale;
     for(int i = 0; i < 10; i++)
@@ -53,7 +53,7 @@ QList<Cell *> board::setBoard(int x, int y, double scale)
         num++;
         p1->setPos(x + i * 25 * scale + 5, y);
         p1->setScale(scale);
-        Cell *bdb = new Cell(x + i * 25 * scale, y + 275 * scale, 1.5, -1, Qt::gray);
+        Cell *bdb = new Cell(x + i * 25 * scale, y + 275 * scale, 1.5, -1, Qt::gray, true);
         scene->addItem(p1);
         scene->addItem(bdb);
     }
@@ -63,7 +63,7 @@ QList<Cell *> board::setBoard(int x, int y, double scale)
     {
         for(int j = 0; j < 10; j++)
         {
-            Cell * rect = new Cell(x + i * 25 * scale, y + j * 25 *scale, scale, counter, Qt::white);
+            Cell * rect = new Cell(x + i * 25 * scale, y + j * 25 *scale, scale, counter, Qt::white, isEn);
             counter++;
             sqs.append(rect);
             scene->addItem(rect);
@@ -100,7 +100,7 @@ void board::rdyBtn_clicked()
                 brush.setStyle(Qt::SolidPattern);
                 brush.setColor(Qt::blue);
                 i->setBrush(brush);
-                i->isShip = true;
+                i->set_isShip(true);
             }
         }
     }
@@ -126,7 +126,6 @@ void board::get_Damage(int nc)
         i->setVisible(true);
     }
     bool wounded = false;
-    bool isAlive = true;
     QList<QGraphicsItem *> list = playerCells[nc]->collidingItems() ;
     foreach(QGraphicsItem * i , list)
     {
@@ -137,39 +136,36 @@ void board::get_Damage(int nc)
             if(st == Healthstate::Wounded)
             {
                 wounded = true;
-                QBrush brush;
-                brush.setStyle(Qt::SolidPattern);
-                brush.setColor(Qt::yellow);
-                playerCells[nc]->setBrush(brush);
+                playerCells[nc]->setColor(Qt::yellow);
                 emit is_Damaged(false, true, nc);
             }else{
                 wounded = true;
-                isAlive = false;
+                ship.removeAt(ship.indexOf(item));
                 item->setVisible(true);
+                QList<QGraphicsItem *> list = item->collidingItems() ;
+                if(item->is_Vertical() == false)
+                    item->setPos(list.back()->scenePos() + QPointF(0, 29.7 * 1.5));
+                else
+                    item->setPos(list.back()->scenePos());
                 item->setScale(1.5);
-                item->setPos(item->scenePos() - QPointF(6, 6));
                 QBrush brush;
                 brush.setStyle(Qt::SolidPattern);
                 brush.setColor(Qt::red);
                 item->setBrush(brush);
+                item->setOpacity(0);
                 emit is_Damaged(true, true, nc);
             }
         }
     }
     if(!wounded)
     {
-        QBrush brush;
-        brush.setStyle(Qt::SolidPattern);
-        brush.setColor(Qt::cyan);
-        playerCells[nc]->setBrush(brush);
+        playerCells[nc]->setColor(Qt::cyan);
         emit is_Damaged(false, false, nc);
     }
-    if(isAlive)
+
+    foreach(QGraphicsItem * i, this->ship)
     {
-        foreach(QGraphicsItem * i, this->ship)
-        {
-            i->setVisible(false);
-        }
+        i->setVisible(false);
     }
 }
 

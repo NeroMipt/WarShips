@@ -22,12 +22,12 @@ public:
     QPointF coords;
     double originalScale;
     Warship( const int s, QGraphicsItem *parent=NULL);
-    Healthstate getState();
     Healthstate attacked();
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+    bool is_Vertical();
 };
 
 class Boat : public Warship

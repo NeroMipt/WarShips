@@ -1,8 +1,9 @@
 #include "cell.h"
 
 
-Cell::Cell(const int x, const int y, const double scale, int n, QColor color, QGraphicsItem *parent)
+Cell::Cell(const int x, const int y, const double scale, int n, QColor color, const bool enorn, QGraphicsItem *parent)
 {
+    enemy = enorn;
     number = n;
     setRect(0, 0, 25, 25);
     setPos(x, y);
@@ -23,4 +24,24 @@ void Cell::setColor(QColor color)
 {
     brush.setColor(color);
     setBrush(brush);
+}
+
+bool Cell::isOpponent()
+{
+    return this->enemy;
+}
+
+bool Cell::is_Ship()
+{
+    return this->isShip;
+}
+
+void Cell::set_isShip(bool tf)
+{
+    isShip = tf;
+}
+
+int Cell::get_Num()
+{
+    return this->number;
 }

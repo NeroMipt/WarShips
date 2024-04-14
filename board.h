@@ -22,7 +22,7 @@ public:
     QList<Cell*> playerCells;
     QList<QGraphicsItem*> ship;
     board(QGraphicsScene * sc);
-    QList<Cell*> setBoard(int x, int y, double scale);
+    QList<Cell*> setBoard(int x, int y, double scale, bool isEn);
 signals:
     void is_Damaged(bool isKilled, bool st, int nc);
 public slots:

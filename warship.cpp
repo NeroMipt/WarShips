@@ -47,41 +47,77 @@ void Warship::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     QList<QGraphicsItem *> list = collidingItems() ;
 
 
+
     if(!list.isEmpty())
     {
-        setScale(1.7);
-        setPos(list.back()->scenePos() - QPointF(5, 5));
-        isCollided = false;
-        QList<QGraphicsItem *> listAfter = collidingItems() ;
-
-        foreach(QGraphicsItem * i , listAfter)
+        int counter = 0;
+        foreach(QGraphicsItem * j , list)
         {
-            Warship * item= dynamic_cast<Warship *>(i);
-            //Cell * itemCell = dynamic_cast<Cell *>(i);
-            if (item)
+            Cell * itemCell = dynamic_cast<Cell *>(j);
+            if(itemCell)
             {
-                setScale(originalScale);
-                setPos(coords * originalScale);
-                isCollided = true;
+                if(!itemCell->isOpponent())
+                {
+                    counter++;
+                }
             }
-            /*if(!(itemCell->number >= 0))
-            {
-                setScale(originalScale);
-                setPos(coords * originalScale);
-                isCollided = true;
-            }*/
+        }
+        if(counter == size)
+        {
+            setScale(1.7);
 
+            if(isVertical)
+                setPos(list.back()->scenePos() - QPointF(5, 5));
+            else
+                setPos(list.back()->scenePos() + QPointF(0, 29.7 * originalScale));
+
+            isCollided = false;
+            QList<QGraphicsItem *> listAfter = collidingItems() ;
+
+            foreach(QGraphicsItem * i , listAfter)
+            {
+                Warship * item= dynamic_cast<Warship *>(i);
+                if (item)
+                {
+                    setScale(originalScale);
+                    if(isVertical == false)
+                    {
+                        setRotation(0);
+                        isVertical = true;
+                    }
+                    setPos(coords * originalScale);
+                    isCollided = true;
+                }
+
+            }
+        }else
+        {
+            setScale(originalScale);
+            if(isVertical == false)
+            {
+                setRotation(0);
+                isVertical = true;
+            }
+            setPos(coords * originalScale);
+            isCollided = true;
         }
         if(isCollided == false)
         {
             if(isVertical == false)
-                setPos(list.back()->scenePos() + QPointF(0, 29.6 * originalScale));
+                setPos(list.back()->scenePos() + QPointF(0, 29.7 * originalScale));
             else
                 setPos(list.back()->scenePos());
             setScale(1.5);
         }
     }else
+    {
+        if(isVertical == false)
+        {
+            setRotation(0);
+            isVertical = true;
+        }
         setPos(coords * originalScale);
+    }
     Q_UNUSED(event);
 }
 
@@ -90,23 +126,17 @@ void Warship::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     mouseCoord = this->pos() - mapToScene(event->pos());
     if(isVertical == true)
     {
-        setTransformOriginPoint(this->scenePos());
         setRotation(-90);
-        setTransformOriginPoint(0, 0);
-        this->setPos(mapToScene(event->pos()) + mouseCoord);
         isVertical = false;
     }
     else{
         setRotation(0);
-        this->setPos(mapToScene(event->pos()) + mouseCoord);
+
         isVertical = true;
     }
 }
 
-Healthstate Warship::getState()
+bool Warship::is_Vertical()
 {
-    if(hp == size) return Healthstate::Healthy;
-    if(hp == 0) return Healthstate::Dead;
-    else return Healthstate::Wounded;
+    return isVertical;
 }
-
