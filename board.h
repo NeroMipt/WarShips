@@ -23,10 +23,10 @@ public:
     QList<QGraphicsItem*> ship;
     board(QGraphicsScene * sc);
     QList<Cell*> setBoard(int x, int y, double scale, bool isEn);
+    void rdyBtn_clicked();
 signals:
     void is_Damaged(bool isKilled, bool st, int nc);
 public slots:
-    void rdyBtn_clicked();
     void get_Damage(int nc);
 
 };

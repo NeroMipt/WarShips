@@ -3,12 +3,13 @@
 
 GameCore::GameCore(QWidget *parent)
 {
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setFixedSize(1024, 768);
+    setFixedSize(1200, 768);
     scene = new QGraphicsScene;
-    scene->setSceneRect(0, 0, 1024, 768);
-    QGraphicsView * view = new QGraphicsView(scene);
+    scene->setSceneRect(0, 0, 1200, 768);
+    view = new QGraphicsView(scene);
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setFixedSize(1200, 768);
     view->show();
     this->displayMainMenu();
     Q_UNUSED(parent);
@@ -35,7 +36,7 @@ void GameCore::displayMainMenu()
     int bqxPos =this->width()/2 - quitBtn->boundingRect().width()/2;
     int bqyPos = 475;
     quitBtn->setPos(bqxPos, bqyPos);
-    connect(quitBtn, SIGNAL(clicked()), this, SLOT(close()));
+    connect(quitBtn, SIGNAL(clicked()), view, SLOT(close()));
     scene->addItem(quitBtn);
 }
 
@@ -45,33 +46,44 @@ void GameCore::exec()
     scene->clear();
     obj = new board(scene);
     rdyBtn = new  button(QString("Ready"));
-    rdyBtn->setPos(500, 100);
+    rdyBtn->setPos(view->width()/2, 100);
     rdyBtn->setScale(1);
     connect(rdyBtn, SIGNAL(clicked()), this, SLOT(isReady()));
-    connect(rdyBtn, SIGNAL(clicked()), obj, SLOT(rdyBtn_clicked()));
     connect(cl, SIGNAL(attacked(int)), obj, SLOT(get_Damage(int)));
     connect(cl, SIGNAL(responseDamage(int)), this, SLOT(damaged(int)));
     connect(cl, SIGNAL(responseNonDamage(int)), this, SLOT(nonDamaged(int)));
     connect(cl, SIGNAL(responseKilledObj(int)), this, SLOT(killedSh(int)));
+    connect(cl, SIGNAL(isReady()), this, SLOT(opIsRdy()));
     connect(obj, SIGNAL(is_Damaged(bool,bool,int)), this, SLOT(isDamaged(bool,bool,int)));
     scene->addItem(rdyBtn);
-    foreach(Cell * i , obj->enemyCells)
-    {
-        connect(i, SIGNAL(choosedCell(int)), this, SLOT(attacking(int)));
-    }
     this->addShip();
 }
 
 void GameCore::isReady()
 {
+    foreach(Warship *i, ship)
+    {
+        if(!i->is_Placed())
+        {
+            QMessageBox::warning(view, "Ошибка", "Разместите все корабли!");
+            return;
+        }
+    }
     cl->SendToServer(-2, -1);
     scene->removeItem(rdyBtn);
+    foreach(Warship *i, ship)
+    {
+        i->setFlag(QGraphicsItem::ItemIsMovable, false);
+    }
+    obj->rdyBtn_clicked();
+
 }
 
 void GameCore::isDamaged(bool isKilled, bool tof, int nc)
 {
     if(tof)
     {
+        this->toggle_Interactions(false);
         totalHP--;
         if(totalHP == 0)
             cl->SendToServer(-5, nc);
@@ -79,7 +91,11 @@ void GameCore::isDamaged(bool isKilled, bool tof, int nc)
             cl->SendToServer(-6, nc);
         else
             cl->SendToServer(-3, nc);
-    }else cl->SendToServer(-4, nc);
+    }else
+    {
+        cl->SendToServer(-4, nc);
+        this->toggle_Interactions(true);
+    }
 }
 
 void GameCore::attacking(int nc)
@@ -97,6 +113,7 @@ void GameCore::damaged(int nc)
 void GameCore::nonDamaged(int nc)
 {
     obj->enemyCells[nc]->setColor(Qt::cyan);
+    this->toggle_Interactions(false);
 }
 
 void GameCore::killedSh(int nc)
@@ -110,6 +127,7 @@ void GameCore::killedSh(int nc)
             while(obj->enemyCells[i]->is_Ship())
             {
                 obj->enemyCells[i]->setColor(Qt::red);
+                disconnect(obj->enemyCells[i], SIGNAL(choosedCell(int)), this, SLOT(attacking(int)));
                 i--;
             }
         }
@@ -122,6 +140,7 @@ void GameCore::killedSh(int nc)
             while(obj->enemyCells[i]->is_Ship())
             {
                 obj->enemyCells[i]->setColor(Qt::red);
+                disconnect(obj->enemyCells[i], SIGNAL(choosedCell(int)), this, SLOT(attacking(int)));
                 i++;
             }
         }
@@ -134,6 +153,7 @@ void GameCore::killedSh(int nc)
             while(obj->enemyCells[i]->is_Ship())
             {
                 obj->enemyCells[i]->setColor(Qt::red);
+                disconnect(obj->enemyCells[i], SIGNAL(choosedCell(int)), this, SLOT(attacking(int)));
                 i+=10;
             }
         }
@@ -145,11 +165,17 @@ void GameCore::killedSh(int nc)
             int i = nc - 10;
             while(obj->enemyCells[i]->is_Ship())
             {
+                disconnect(obj->enemyCells[i], SIGNAL(choosedCell(int)), this, SLOT(attacking(int)));
                 obj->enemyCells[i]->setColor(Qt::red);
                 i-=10;
             }
         }
     }
+}
+
+void GameCore::opIsRdy()
+{
+    this->toggle_Interactions(true);
 }
 
 
@@ -175,5 +201,30 @@ void GameCore::addShip()
     scene->addItem(bs2);
     Cruiser *c = new Cruiser(100, 100, 1.25);
     scene->addItem(c);
+    ship.append(b1);
+    ship.append(b2);
+    ship.append(b3);
+    ship.append(b4);
+    ship.append(d1);
+    ship.append(d2);
+    ship.append(d3);
+    ship.append(bs1);
+    ship.append(bs2);
+}
 
+void GameCore::toggle_Interactions(bool is_On)
+{
+    if(is_On)
+    {
+        foreach(Cell * i , obj->enemyCells)
+        {
+            connect(i, SIGNAL(choosedCell(int)), this, SLOT(attacking(int)));
+        }
+    }else
+    {
+        foreach(Cell * i , obj->enemyCells)
+        {
+            disconnect(i, SIGNAL(choosedCell(int)), this, SLOT(attacking(int)));
+        }
+    }
 }

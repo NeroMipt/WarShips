@@ -17,6 +17,7 @@ private:
     int    hp;
     bool isVertical = true;
     bool isCollided = false;
+    bool isPlaced = false;
     QPointF mouseCoord;
 public:
     QPointF coords;
@@ -28,6 +29,7 @@ public:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
     bool is_Vertical();
+    bool is_Placed();
 };
 
 class Boat : public Warship

@@ -22,6 +22,7 @@ signals:
     void responseNonDamage(int nc);
     void responseKilledObj(int nc);
     void responseWin();
+    void isReady();
 };
 
 #endif // CLIENT_H

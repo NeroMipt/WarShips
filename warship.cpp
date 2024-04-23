@@ -80,26 +80,18 @@ void Warship::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 if (item)
                 {
                     setScale(originalScale);
-                    if(isVertical == false)
-                    {
-                        setRotation(0);
-                        isVertical = true;
-                    }
                     setPos(coords * originalScale);
                     isCollided = true;
+                    isPlaced = false;
                 }
 
             }
         }else
         {
             setScale(originalScale);
-            if(isVertical == false)
-            {
-                setRotation(0);
-                isVertical = true;
-            }
             setPos(coords * originalScale);
             isCollided = true;
+            isPlaced = false;
         }
         if(isCollided == false)
         {
@@ -108,14 +100,10 @@ void Warship::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
             else
                 setPos(list.back()->scenePos());
             setScale(1.5);
+            isPlaced = true;
         }
     }else
     {
-        if(isVertical == false)
-        {
-            setRotation(0);
-            isVertical = true;
-        }
         setPos(coords * originalScale);
     }
     Q_UNUSED(event);
@@ -136,7 +124,13 @@ void Warship::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+
 bool Warship::is_Vertical()
 {
     return isVertical;
+}
+
+bool Warship::is_Placed()
+{
+    return isPlaced;
 }

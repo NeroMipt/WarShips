@@ -10,7 +10,7 @@ class button : public QObject, public QGraphicsRectItem
 public:
     button(QString name, QGraphicsItem *parent=NULL);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void hoverPressEvent(QGraphicsSceneHoverEvent *event);
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 signals:
     void clicked();

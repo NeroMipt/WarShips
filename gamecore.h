@@ -12,6 +12,7 @@
 #include <warship.h>
 #include <QMouseEvent>
 #include <client.h>
+#include <QMessageBox>
 
 class GameCore : public QGraphicsView
 {
@@ -22,8 +23,10 @@ private:
     QGraphicsScene * scene;
     board * obj;
     button * rdyBtn;
-
+    QGraphicsView * view;
+    QList<Warship*> ship;
     void addShip();
+    void toggle_Interactions(bool is_On);
 public:
     GameCore(QWidget* parent=NULL);
     void displayMainMenu();
@@ -35,6 +38,7 @@ private slots:
     void damaged(int nc);
     void nonDamaged(int nc);
     void killedSh(int nc);
+    void opIsRdy();
 };
 
 #endif // GAMECORE_H

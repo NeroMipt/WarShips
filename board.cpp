@@ -6,15 +6,35 @@ board::board(QGraphicsScene *sc)
     scene = sc;
 
 
-    this->drawPanel(0, 0, 150, 768, Qt::white, 1);
+    this->drawPanel(0, 0, 175, 768, Qt::white, 1);
 
 
     QGraphicsTextItem* p1 = new QGraphicsTextItem("Player 1");
     p1->setPos(25, 0);
     scene->addItem(p1);
 
-    playerCells = this->setBoard(200, 250, 1.5, false);
-    enemyCells = this->setBoard(700, 250, 1.5, true);
+    QGraphicsTextItem* tnwd = new QGraphicsTextItem("- мимо");
+    QGraphicsTextItem* twd = new QGraphicsTextItem("- ранен");
+    QGraphicsTextItem* tkd = new QGraphicsTextItem("- убит");
+    tnwd->setScale(1.1);
+    twd->setScale(1.1);
+    tkd->setScale(1.1);
+    tnwd->setPos(40, 600);
+    twd->setPos(40, 650);
+    tkd->setPos(40, 700);
+    scene->addItem(tnwd);
+    scene->addItem(twd);
+    scene->addItem(tkd);
+    Cell *nwd = new Cell(10, 600, 1.1, -1, Qt::cyan, true);
+    Cell *wd = new Cell(10, 650, 1.1, -1, Qt::yellow, true);
+    Cell *kd = new Cell(10, 700, 1.1, -1, Qt::red, true);
+    scene->addItem(nwd);
+    scene->addItem(wd);
+    scene->addItem(kd);
+
+    playerCells = this->setBoard(200, 175, 1.5, false);
+    enemyCells = this->setBoard(700, 175, 1.5, true);
+
 }
 
 
@@ -83,8 +103,14 @@ void board::rdyBtn_clicked()
             Warship * item= dynamic_cast<Warship *>(t);
             if (item)
             {
-                item->setPos(item->scenePos() + QPointF(1, 1));
-                item->setScale(1.1);
+                if(item->is_Vertical())
+                {
+                    item->setPos(item->scenePos() + QPointF(1, 1));
+                    item->setScale(1.1);
+                }else{
+                    item->setPos(item->scenePos() + QPointF(1, -1));
+                    item->setScale(1.1);
+                }
             }
         }
     }
@@ -112,6 +138,7 @@ void board::rdyBtn_clicked()
             Warship * item= dynamic_cast<Warship *>(t);
             if (item)
             {
+                item->setAcceptDrops(false);
                 item->setVisible(false);
                 this->ship.append(item);
             }
@@ -152,7 +179,6 @@ void board::get_Damage(int nc)
                 brush.setStyle(Qt::SolidPattern);
                 brush.setColor(Qt::red);
                 item->setBrush(brush);
-                item->setOpacity(0);
                 emit is_Damaged(true, true, nc);
             }
         }
