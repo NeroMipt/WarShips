@@ -101,6 +101,7 @@ void GameCore::isDamaged(bool isKilled, bool tof, int nc)
 void GameCore::attacking(int nc)
 {
     obj->enemyCells[nc]->setColor(Qt::yellow);
+    disconnect(obj->enemyCells[nc], SIGNAL(choosedCell(int)), this, SLOT(attacking(int)));
     cl->SendToServer(1, nc);
 }
 
@@ -127,7 +128,6 @@ void GameCore::killedSh(int nc)
             while(obj->enemyCells[i]->is_Ship())
             {
                 obj->enemyCells[i]->setColor(Qt::red);
-                disconnect(obj->enemyCells[i], SIGNAL(choosedCell(int)), this, SLOT(attacking(int)));
                 i--;
             }
         }
@@ -140,7 +140,6 @@ void GameCore::killedSh(int nc)
             while(obj->enemyCells[i]->is_Ship())
             {
                 obj->enemyCells[i]->setColor(Qt::red);
-                disconnect(obj->enemyCells[i], SIGNAL(choosedCell(int)), this, SLOT(attacking(int)));
                 i++;
             }
         }
@@ -165,7 +164,6 @@ void GameCore::killedSh(int nc)
             int i = nc - 10;
             while(obj->enemyCells[i]->is_Ship())
             {
-                disconnect(obj->enemyCells[i], SIGNAL(choosedCell(int)), this, SLOT(attacking(int)));
                 obj->enemyCells[i]->setColor(Qt::red);
                 i-=10;
             }

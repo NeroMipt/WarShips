@@ -157,7 +157,7 @@ void board::get_Damage(int nc)
     foreach(QGraphicsItem * i , list)
     {
         Warship * item= dynamic_cast<Warship *>(i);
-        if (item)
+        if (item && item->getHealth())
         {
             Healthstate st = item->attacked();
             if(st == Healthstate::Wounded)
@@ -171,10 +171,11 @@ void board::get_Damage(int nc)
                 item->setVisible(true);
                 QList<QGraphicsItem *> list = item->collidingItems() ;
                 if(item->is_Vertical() == false)
-                    item->setPos(list.back()->scenePos() + QPointF(0, 29.7 * 1.5));
+                    item->setPos(list.back()->scenePos() + QPointF(0, 25 * 1.5));
                 else
                     item->setPos(list.back()->scenePos());
                 item->setScale(1.5);
+                item->setOpacity(0);
                 QBrush brush;
                 brush.setStyle(Qt::SolidPattern);
                 brush.setColor(Qt::red);

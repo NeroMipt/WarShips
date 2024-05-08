@@ -39,6 +39,7 @@ void Client::slotReadyRead()
     }
     case -2:{
         emit isReady();
+        break;
     }
     case -3:{
         emit responseDamage(nc);

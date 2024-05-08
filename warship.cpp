@@ -29,6 +29,11 @@ Healthstate Warship::attacked()
     }
 }
 
+int Warship::getHealth()
+{
+    return hp;
+}
+
 void Warship::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     this->setPos(mapToScene(event->pos()) + mouseCoord);

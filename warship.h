@@ -24,6 +24,7 @@ public:
     double originalScale;
     Warship( const int s, QGraphicsItem *parent=NULL);
     Healthstate attacked();
+    int getHealth();
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
@@ -41,6 +42,7 @@ public:
         setPos(x * scale , y * scale);
         setScale(scale);
         coords = QPointF(x, y);
+        originalScale = scale;
     }
 };
 
