@@ -6,21 +6,45 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QDataStream>
+#include <QThread>
+#include <QQueue>
+
+class Server;
+
+class ClientThread : public QThread
+{
+    Q_OBJECT
+
+public:
+    explicit ClientThread(QTcpSocket *socket, QPair<QTcpSocket*, QTcpSocket*> *sockets, Server *server, QObject *parent = nullptr);
+
+protected:
+    void run() override;
+
+signals:
+    void finished();
+
+private:
+    QTcpSocket *socket;
+    QPair<QTcpSocket*, QTcpSocket*> *sockets;
+    Server *server;
+};
 
 class Server : public QTcpServer
 {
-private:
     Q_OBJECT
 
 public:
     Server();
-    QTcpSocket *socket;
+    ~Server();
+
+    void SendToClient1(const QString &message);
+    void SendToClient2(const QString &message);
 
 private:
     QPair <QTcpSocket*, QTcpSocket*> Sockets;
-    QByteArray Data;
-    void SendToClient1(QString str);
-    void SendToClient2(QString str);
+    QList<ClientThread*> clientThreads;
+    QQueue<QTcpSocket*> waitingClients;
 
 public slots:
     void incomingConnection(qintptr socketDescriptor);
