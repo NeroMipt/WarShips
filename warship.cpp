@@ -67,7 +67,7 @@ void Warship::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
                 }
             }
         }
-        if(counter == size)
+        if(counter == size && list.size() == size)
         {
             setScale(1.7);
 
