@@ -3,6 +3,7 @@
 void Client::SendToServer(int num, int nc)
 {
     QString str = QString::number(num) + " " + QString::number(nc);
+    // qDebug() << str;
     Data.clear();
     QDataStream out(&Data, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_5_9);
@@ -29,6 +30,7 @@ void Client::slotReadyRead()
     {
         in >> str;
     }
+    qDebug() << str;
     QStringList list = str.split(' ');
     int command = list[0].toInt();
     int nc      = list[1].toInt();

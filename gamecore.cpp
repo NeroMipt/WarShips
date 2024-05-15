@@ -173,6 +173,7 @@ void GameCore::killedSh(int nc)
 
 void GameCore::opIsRdy()
 {
+    qDebug() << "opponent ready";
     this->toggle_Interactions(true);
 }
 

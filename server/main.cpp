@@ -1,8 +1,12 @@
-#include <QCoreApplication>
 #include "server.h"
+#include <QCoreApplication>
+
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
-    Server s;
-    return a.exec();
+    QCoreApplication app(argc, argv);
+
+    Server server;
+    // server.listen();
+
+    return app.exec();
 }
