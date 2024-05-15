@@ -18,7 +18,6 @@ class Server : public QTcpServer
 
 public:
     Server(QObject *parent = nullptr);
-    // void listen();
 
 private slots:
     void onNewConnection();
