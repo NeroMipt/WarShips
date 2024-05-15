@@ -5,27 +5,28 @@
 
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QVector>
+#include <QThread>
 #include <QDataStream>
+#include "clientthread.h"
+
+class ClientThread;
 
 class Server : public QTcpServer
 {
-private:
     Q_OBJECT
 
 public:
-    Server();
-    QTcpSocket *socket;
+    Server(QObject *parent = nullptr);
+    // void listen();
+
+private slots:
+    void onNewConnection();
+    void onDisconnected();
 
 private:
-    QPair <QTcpSocket*, QTcpSocket*> Sockets;
-    QByteArray Data;
-    void SendToClient1(QString str);
-    void SendToClient2(QString str);
-
-public slots:
-    void incomingConnection(qintptr socketDescriptor);
-    void slotReadyRead();
-
+    QVector<QTcpSocket*> clients;
+    QVector<QThread*> threads;
 };
 
 #endif // SERVER_H
