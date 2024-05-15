@@ -175,7 +175,6 @@ void board::get_Damage(int nc)
                 else
                     item->setPos(list.back()->scenePos());
                 item->setScale(1.5);
-                item->setOpacity(0);
                 QBrush brush;
                 brush.setStyle(Qt::SolidPattern);
                 brush.setColor(Qt::red);
