@@ -13,6 +13,8 @@
 #include <QMouseEvent>
 #include <client.h>
 #include <QMessageBox>
+#include <QGraphicsTextItem>
+#include <ipstring.h>
 
 class GameCore : public QGraphicsView
 {
@@ -25,6 +27,7 @@ private:
     button * rdyBtn;
     QGraphicsView * view;
     QList<Warship*> ship;
+    ipstring *ip_add;
     void addShip();
     void toggle_Interactions(bool is_On);
 public:

@@ -25,9 +25,13 @@ void GameCore::displayMainMenu()
     titleText->setPos(txPos, tyPos);
     scene->addItem(titleText);
 
+    ip_add = new ipstring(this->width() / 2, 270);
+    scene->addItem(ip_add);
+
+
     button * playBtn = new button(QString("Connect"));
     int bxPos =this->width()/2 - playBtn->boundingRect().width()/2;
-    int byPos = 275;
+    int byPos = 300;
     playBtn->setPos(bxPos, byPos);
     connect(playBtn, SIGNAL(clicked()), this, SLOT(exec()));
     scene->addItem(playBtn);
@@ -40,9 +44,17 @@ void GameCore::displayMainMenu()
     scene->addItem(quitBtn);
 }
 
+
 void GameCore::exec()
 {
-    cl = new Client();
+
+    QString ip = ip_add->getText();
+    if(ip.isEmpty())
+    {
+        QMessageBox::warning(view, "Ошибка", "Введите корректный адрес!");
+        return;
+    }
+    cl = new Client(ip);
     scene->clear();
     obj = new board(scene);
     rdyBtn = new  button(QString("Ready"));
@@ -128,6 +140,7 @@ void GameCore::killedSh(int nc)
             while(obj->enemyCells[i]->is_Ship())
             {
                 obj->enemyCells[i]->setColor(Qt::red);
+                if(i == 0) break;
                 i--;
             }
         }
@@ -140,6 +153,7 @@ void GameCore::killedSh(int nc)
             while(obj->enemyCells[i]->is_Ship())
             {
                 obj->enemyCells[i]->setColor(Qt::red);
+                if(i == 100) break;
                 i++;
             }
         }
@@ -153,6 +167,7 @@ void GameCore::killedSh(int nc)
             {
                 obj->enemyCells[i]->setColor(Qt::red);
                 disconnect(obj->enemyCells[i], SIGNAL(choosedCell(int)), this, SLOT(attacking(int)));
+                if(i == 100) break;
                 i+=10;
             }
         }
@@ -165,6 +180,7 @@ void GameCore::killedSh(int nc)
             while(obj->enemyCells[i]->is_Ship())
             {
                 obj->enemyCells[i]->setColor(Qt::red);
+                if(i == 0) break;
                 i-=10;
             }
         }
@@ -173,7 +189,6 @@ void GameCore::killedSh(int nc)
 
 void GameCore::opIsRdy()
 {
-    qDebug() << "opponent ready";
     this->toggle_Interactions(true);
 }
 

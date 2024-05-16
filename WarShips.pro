@@ -14,6 +14,7 @@ SOURCES += \
     cell.cpp \
     client.cpp \
     gamecore.cpp \
+    ipstring.cpp \
     main.cpp \
     warship.cpp
 
@@ -23,6 +24,7 @@ HEADERS += \
     cell.h \
     client.h \
     gamecore.h \
+    ipstring.h \
     warship.h
 
 FORMS +=

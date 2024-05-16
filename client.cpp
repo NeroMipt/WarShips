@@ -3,7 +3,6 @@
 void Client::SendToServer(int num, int nc)
 {
     QString str = QString::number(num) + " " + QString::number(nc);
-    // qDebug() << str;
     Data.clear();
     QDataStream out(&Data, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_5_9);
@@ -13,12 +12,12 @@ void Client::SendToServer(int num, int nc)
 
 
 
-Client::Client()
+Client::Client(QString addr)
 {
     socket = new QTcpSocket();
     connect(socket, &QTcpSocket::readyRead, this, &Client::slotReadyRead);
     connect(socket, &QTcpSocket::disconnected, socket, &QTcpSocket::deleteLater);
-    socket->connectToHost("127.0.0.1", 2323);
+    socket->connectToHost(addr, 2323);
 }
 
 void Client::slotReadyRead()
