@@ -1,0 +1,10 @@
+Package: WarShips
+Version: 1.0
+Section: games
+Priority: optional
+Depends: libc6, libqt5widgets5, libqt5gui5, libqt5network5, libqt5core5a, libgl1, libgcc-s1
+Architecture: all
+Essential: no
+Installed-Size: 4460
+Maintainer: E&I <warships(donate)@war.ship>
+Description: board game sea battle
