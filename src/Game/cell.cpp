@@ -1,4 +1,4 @@
-#include "cell.h"
+#include "include/incgm/cell.h"
 
 
 Cell::Cell(const int x, const int y, const double scale, int n, QColor color, const bool enorn, QGraphicsItem *parent)

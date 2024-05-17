@@ -9,23 +9,25 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    board.cpp \
-    button.cpp \
-    cell.cpp \
-    client.cpp \
-    gamecore.cpp \
-    ipstring.cpp \
-    main.cpp \
-    warship.cpp
+    src/Game/board.cpp \
+    src/Game/button.cpp \
+    src/Game/cell.cpp \
+    src/Game/client.cpp \
+    src/Game/gamecore.cpp \
+    src/Game/ipstring.cpp \
+    src/Game/main.cpp \
+    src/Game/warship.cpp \
+
 
 HEADERS += \
-    board.h \
-    button.h \
-    cell.h \
-    client.h \
-    gamecore.h \
-    ipstring.h \
-    warship.h
+    include/incgm/board.h \
+    include/incgm/button.h \
+    include/incgm/cell.h \
+    include/incgm/client.h \
+    include/incgm/gamecore.h \
+    include/incgm/ipstring.h \
+    include/incgm/warship.h \
+
 
 FORMS +=
 

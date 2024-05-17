@@ -1,5 +1,5 @@
-#include "gamecore.h"
-#include <cell.h>
+#include "include/incgm/gamecore.h"
+#include "include/incgm/cell.h"
 
 GameCore::GameCore(QWidget *parent)
 {

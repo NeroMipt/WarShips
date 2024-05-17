@@ -1,4 +1,4 @@
-#include "client.h"
+#include "include/incgm/client.h"
 
 void Client::SendToServer(int num, int nc)
 {

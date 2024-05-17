@@ -1,4 +1,4 @@
-#include "ipstring.h"
+#include "include/incgm/ipstring.h"
 #include <QDebug>
 
 ipstring::ipstring(int x, int y)
@@ -18,7 +18,7 @@ void ipstring::focusOutEvent(QFocusEvent *event)
                      + "\\." + ipRange + "$");
     QRegExpValidator *ipValidator = new QRegExpValidator(ipRegex, this);
     ip_address = toPlainText();
-    if(ipValidator->validate(ip_address, pos) == QValidator::Acceptable)
+
 
 
     if(ip_address.isEmpty() || !(ipValidator->validate(ip_address, pos) == QValidator::Acceptable))

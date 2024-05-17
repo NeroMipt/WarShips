@@ -7,14 +7,14 @@
 #include <QGraphicsScene>
 #include <QGraphicsRectItem>
 #include <QGraphicsView>
-#include <button.h>
-#include <board.h>
-#include <warship.h>
+#include "include/incgm/button.h"
+#include "include/incgm/board.h"
+#include "include/incgm/warship.h"
 #include <QMouseEvent>
-#include <client.h>
+#include "include/incgm/client.h"
 #include <QMessageBox>
 #include <QGraphicsTextItem>
-#include <ipstring.h>
+#include "include/incgm/ipstring.h"
 
 class GameCore : public QGraphicsView
 {

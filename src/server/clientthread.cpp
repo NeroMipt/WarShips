@@ -1,8 +1,7 @@
-#include "clientthread.h"
+#include "include/incsv/clientthread.h"
 
 ClientThread::ClientThread(QTcpSocket *socket1, QTcpSocket *socket2, QObject *parent) :
     QThread(parent), socket1(socket1), socket2(socket2)
-// конструктор для ClientThread, который будет обрабатывать socket1 и socket2
 {
     connect(socket1, &QTcpSocket::readyRead, this, &ClientThread::onReadyRead);
     connect(socket2, &QTcpSocket::readyRead, this, &ClientThread::onReadyRead);

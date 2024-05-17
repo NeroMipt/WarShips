@@ -1,5 +1,5 @@
 #include <QApplication>
-#include <gamecore.h>
+#include "include/incgm/gamecore.h"
 
 int main(int argc, char *argv[])
 {

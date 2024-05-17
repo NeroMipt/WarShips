@@ -1,9 +1,9 @@
-#include "warship.h"
+#include "include/incgm/warship.h"
 #include <QPainter>
 #include <QtCore>
 #include <QCursor>
 #include <QList>
-#include <cell.h>
+#include "include/incgm/cell.h"
 
 Warship::Warship(const int s , QGraphicsItem *parent)
 {

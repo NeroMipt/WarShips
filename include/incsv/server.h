@@ -8,7 +8,7 @@
 #include <QVector>
 #include <QThread>
 #include <QDataStream>
-#include "clientthread.h"
+#include "include/incsv/clientthread.h"
 
 class ClientThread;
 

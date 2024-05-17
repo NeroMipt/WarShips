@@ -1,4 +1,4 @@
-#include "board.h"
+#include "include/incgm/board.h"
 #include <QtCore>
 
 board::board(QGraphicsScene *sc)

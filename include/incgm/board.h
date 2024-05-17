@@ -5,8 +5,8 @@
 #include <QList>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <cell.h>
-#include <warship.h>
+#include "include/incgm/cell.h"
+#include "include/incgm/warship.h"
 
 class board : public QGraphicsView
 {
