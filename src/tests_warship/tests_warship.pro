@@ -4,7 +4,8 @@ TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG += thread
-#CONFIG -= qt
+
 
 SOURCES += \
-        main.cpp         tst_test_sets.cpp
+        main.cpp         tst_test_sets.cpp \
+        tst_testplace_sets.cpp

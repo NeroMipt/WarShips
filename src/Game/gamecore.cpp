@@ -131,7 +131,6 @@ void GameCore::nonDamaged(int nc)
 
 void GameCore::killedSh(int nc)
 {
-    qDebug() << nc;
     obj->enemyCells[nc]->setColor(Qt::red);
     if(nc >= 1)
     {
