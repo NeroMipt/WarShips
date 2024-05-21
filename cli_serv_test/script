@@ -1,0 +1,14 @@
+!/bin/bash
+cd server
+qmake untitled.pro
+make
+./untitled
+cd ../client_test
+qmake client_test
+make 
+./client_test
+(C-c)
+echo comparing input.txt and output.txt
+diff -s input.txt output.txt
+
+
